@@ -1,11 +1,7 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import React, { ReactNode, useState } from "react";
 import { useTheme } from "@react-navigation/native";
-import Animated from "react-native-reanimated";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icons from "@expo/vector-icons/MaterialIcons";
 
 const MAX_PRICE = 500;
@@ -171,7 +167,14 @@ const FilterView = () => {
             </Text>
             <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
               {new Array(7).fill("").map((_, i) => {
-                return <Chip itemCount={i} label="Item" isSelected={i === 0} />;
+                return (
+                  <Chip
+                    key={i}
+                    itemCount={i}
+                    label="Item"
+                    isSelected={i === 0}
+                  />
+                );
               })}
             </View>
           </View>
@@ -184,6 +187,7 @@ const FilterView = () => {
               {COLORS.map((item, i) => {
                 return (
                   <Chip
+                    key={i}
                     itemCount={item.itemCount}
                     label={item.label}
                     left={
@@ -211,6 +215,7 @@ const FilterView = () => {
               {SLEEVES.map((item, i) => {
                 return (
                   <Chip
+                    key={i}
                     itemCount={item.itemCount}
                     label={item.label}
                     isSelected={i === 0}

@@ -1,15 +1,23 @@
 import React from "react";
 import { NavigatorScreenParams } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  NativeStackScreenProps,
+  createNativeStackNavigator,
+} from "@react-navigation/native-stack";
 import DetailsScreen from "../screens/DetailsScreen";
 import TabsNavigator, { TabsStackParamList } from "./TabsNavigator";
 
 export type RootStackParamList = {
   TabsStack: NavigatorScreenParams<TabsStackParamList>;
-  Details: undefined;
+  Details: {
+    id: string;
+  };
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
+
+export type RootStackScreenProps<T extends keyof RootStackParamList> =
+  NativeStackScreenProps<RootStackParamList, T>;
 
 const RootNavigator = () => {
   return (
@@ -21,7 +29,13 @@ const RootNavigator = () => {
           headerShown: false,
         }}
       />
-      <RootStack.Screen name="Details" component={DetailsScreen} />
+      <RootStack.Screen
+        name="Details"
+        component={DetailsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
     </RootStack.Navigator>
   );
 };

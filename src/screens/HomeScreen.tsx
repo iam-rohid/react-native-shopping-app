@@ -16,6 +16,7 @@ import { BlurView } from "expo-blur";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import CustomBackdrop from "../components/CustomBackdrop";
 import FilterView from "../components/FilterView";
+import { TabsStackScreenProps } from "../navigators/TabsNavigator";
 
 const CATEGORIES = [
   "Clothing",
@@ -62,7 +63,7 @@ const MESONARY_LIST_DATA = [
   },
 ];
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }: TabsStackScreenProps<"Home">) => {
   const { colors } = useTheme();
   const [categoryIndex, setCategoryIndex] = useState(0);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -183,24 +184,41 @@ const HomeScreen = () => {
               marginBottom: 12,
             }}
           >
-            <Text style={{ fontSize: 20, fontWeight: "700" }}>
+            <Text
+              style={{ fontSize: 20, fontWeight: "700", color: colors.text }}
+            >
               New Collections
             </Text>
             <TouchableOpacity>
-              <Text>See All</Text>
+              <Text style={{ color: colors.primary }}>See All</Text>
             </TouchableOpacity>
           </View>
           <View style={{ flexDirection: "row", height: 200, gap: 12 }}>
             <Card
+              onPress={() => {
+                navigation.navigate("Details", {
+                  id: "123",
+                });
+              }}
               price={130}
               imageUrl="https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80"
             />
             <View style={{ flex: 1, gap: 12 }}>
               <Card
+                onPress={() => {
+                  navigation.navigate("Details", {
+                    id: "456",
+                  });
+                }}
                 price={120}
                 imageUrl="https://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80"
               />
               <Card
+                onPress={() => {
+                  navigation.navigate("Details", {
+                    id: "789",
+                  });
+                }}
                 price={170}
                 imageUrl="https://images.unsplash.com/photo-1485218126466-34e6392ec754?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2342&q=80"
               />
@@ -224,8 +242,8 @@ const HomeScreen = () => {
                 onPress={() => setCategoryIndex(index)}
                 style={{
                   backgroundColor: isSelected ? colors.primary : colors.card,
-                  paddingHorizontal: 24,
-                  paddingVertical: 16,
+                  paddingHorizontal: 20,
+                  paddingVertical: 12,
                   borderRadius: 100,
                   borderWidth: isSelected ? 0 : 1,
                   borderColor: colors.border,
@@ -235,7 +253,7 @@ const HomeScreen = () => {
                   style={{
                     color: isSelected ? colors.background : colors.text,
                     fontWeight: "600",
-                    fontSize: 16,
+                    fontSize: 14,
                     opacity: isSelected ? 1 : 0.5,
                   }}
                 >
@@ -283,14 +301,20 @@ const HomeScreen = () => {
                         flex: 1,
                         fontSize: 16,
                         fontWeight: "600",
-                        color: colors.text,
+                        color: "#fff",
+                        textShadowColor: "rgba(0,0,0,0.2)",
+                        textShadowOffset: {
+                          height: 1,
+                          width: 0,
+                        },
+                        textShadowRadius: 4,
                       }}
                     >
                       {item.title}
                     </Text>
                     <View
                       style={{
-                        backgroundColor: colors.background,
+                        backgroundColor: colors.card,
                         borderRadius: 100,
                         height: 32,
                         aspectRatio: 1,
@@ -311,7 +335,7 @@ const HomeScreen = () => {
                       flexDirection: "row",
                       backgroundColor: "rgba(0,0,0,0.5)",
                       alignItems: "center",
-                      padding: 8,
+                      padding: 6,
                       borderRadius: 100,
                       overflow: "hidden",
                     }}
@@ -323,7 +347,7 @@ const HomeScreen = () => {
                         fontSize: 16,
                         fontWeight: "600",
                         color: "#fff",
-                        marginLeft: 4,
+                        marginLeft: 8,
                       }}
                       numberOfLines={1}
                     >
@@ -331,13 +355,13 @@ const HomeScreen = () => {
                     </Text>
                     <TouchableOpacity
                       style={{
-                        paddingHorizontal: 16,
+                        paddingHorizontal: 12,
                         paddingVertical: 8,
                         borderRadius: 100,
                         backgroundColor: "#fff",
                       }}
                     >
-                      <Icons name="add-shopping-cart" size={20} color="#000" />
+                      <Icons name="add-shopping-cart" size={18} color="#000" />
                     </TouchableOpacity>
                   </BlurView>
                 </View>
@@ -353,6 +377,13 @@ const HomeScreen = () => {
         index={0}
         ref={bottomSheetModalRef}
         backdropComponent={(props) => <CustomBackdrop {...props} />}
+        backgroundStyle={{
+          borderRadius: 24,
+          backgroundColor: colors.card,
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: colors.primary,
+        }}
       >
         <FilterView />
       </BottomSheetModal>
@@ -362,9 +393,18 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
-const Card = ({ price, imageUrl }: { price: number; imageUrl: string }) => {
+const Card = ({
+  price,
+  imageUrl,
+  onPress,
+}: {
+  price: number;
+  imageUrl: string;
+  onPress?: () => void;
+}) => {
   return (
-    <View
+    <TouchableOpacity
+      onPress={onPress}
       style={{
         flex: 1,
         position: "relative",
@@ -388,10 +428,10 @@ const Card = ({ price, imageUrl }: { price: number; imageUrl: string }) => {
       <View
         style={{
           position: "absolute",
-          left: 16,
-          top: 16,
-          paddingHorizontal: 16,
-          paddingVertical: 10,
+          left: 12,
+          top: 12,
+          paddingHorizontal: 12,
+          paddingVertical: 8,
           backgroundColor: "rgba(0,0,0,0.25)",
           borderRadius: 100,
         }}
@@ -400,6 +440,6 @@ const Card = ({ price, imageUrl }: { price: number; imageUrl: string }) => {
           ${price}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
